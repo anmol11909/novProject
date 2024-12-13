@@ -22,9 +22,13 @@ public ProductController(ProductService productService) { // constructor to assi
 
     @GetMapping("/products/{id}")
     public Product getProductById(@PathVariable("id") Long id) {
-    productService.getSingleProduct(id);
-        return null;
-        // getting the product
+        System.out.println("Staring the API here");
+
+    Product p = productService.getSingleProduct(id);
+
+        System.out.println("Ending the API here");
+        return p;
+        // getting the product from the service
 
 
     }
