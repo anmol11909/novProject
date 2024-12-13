@@ -1,24 +1,31 @@
 package com.scaler.finalnovprojectmodule.controller;
 
 import com.scaler.finalnovprojectmodule.models.Product;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.scaler.finalnovprojectmodule.service.ProductService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
     // CRUD APIs around product
     //@RequestMapping(value = "/products", ,method = RequestMethod.POST)
     // anyone doing POST request on the above API, the below method will be executed//
+private ProductService productService;
+
+public ProductController(ProductService productService) { // constructor to assign productservice to product controller. DI
+    this.productService = productService;
+}
 
     @PostMapping("/products")
     public void createProduct(Product product) {
         // help in creating a product
     }
-    public Product getProductById(Long id) {
+
+    @GetMapping("/products/{id}")
+    public Product getProductById(@PathVariable("id") Long id) {
+    productService.getSingleProduct(id);
         return null;
         // getting the product
+
 
     }
     public void updateProduct(Product product) {
