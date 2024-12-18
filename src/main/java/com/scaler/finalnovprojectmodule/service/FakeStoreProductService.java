@@ -1,6 +1,7 @@
 package com.scaler.finalnovprojectmodule.service;
 
 import com.scaler.finalnovprojectmodule.Dto.FakeStoreProductDto;
+import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +18,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
 
-    public Product getSingleProduct(long id) {
+    public Product getSingleProduct(long id) throws ProductNotFoundException {
 
         System.out.println("Inside fakestore product service");
         FakeStoreProductDto fakeStoreProductDto =
@@ -28,9 +29,11 @@ public class FakeStoreProductService implements ProductService{
         // get request from the API(URL) for the object of the specified class
         // jackson will map the response that we will get from the API to fakeStoreProductDto class's object
 
+       // System.out.println(fakeStoreProductDto.toString());
 
-
-
+        if(fakeStoreProductDto==null){
+            throw new ProductNotFoundException("Product not found with id " + id);
+        }
         return fakeStoreProductDto.getProduct();
         //COMPLETE API
     }
