@@ -8,11 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FinalNovProjectModuleApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FinalNovProjectModuleApplication.class, args);
-
-        Product p = new Product();
-        p.setId(12L);
-        System.out.println(p);
+//        SpringApplication.run(FinalNovProjectModuleApplication.class, args);
+//
+//        Product p = new Product();
+//        p.setId(12L);
+//        System.out.println(p);
 
     }
 }

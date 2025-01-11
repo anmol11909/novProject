@@ -1,48 +1,96 @@
 package com.scaler.finalnovprojectmodule.service;
 
-import com.scaler.finalnovprojectmodule.Dto.FakeStoreProductDto;
+import com.scaler.finalnovprojectmodule.Dto.fakeStoreProductDto;
 import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Product;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-@Service
-public class FakeStoreProductService implements ProductService{
+@Service("fakeStoreProductService")
 
-    // Inside this fakestore is going to be third party//
+public class fakeStoreProductService implements ProductService {
     private RestTemplate restTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public fakeStoreProductService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
+    @Override
+    public Product getSingleProduct(Long id) throws ProductNotFoundException {
+        System.out.println("We are in Single Product");
 
-    public Product getSingleProduct(long id) throws ProductNotFoundException {
+        fakeStoreProductDto fakeStoreProductDto =
+                restTemplate.getForObject("https://fakestoreapi.com/products/" + id, fakeStoreProductDto.class);
 
-        System.out.println("Inside fakestore product service");
-        FakeStoreProductDto fakeStoreProductDto =
-        restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
-
-        // above This method sends an HTTP GET request to the specified URL with product id
-        // and maps the response body into a Java object of the specified type (fakestoreproductdto.class in this case).
-        // get request from the API(URL) for the object of the specified class
-        // jackson will map the response that we will get from the API to fakeStoreProductDto class's object
-
-       // System.out.println(fakeStoreProductDto.toString());
-
-        if(fakeStoreProductDto==null){
+        if (fakeStoreProductDto == null) {
             throw new ProductNotFoundException("Product not found with id " + id);
         }
+        System.out.println(fakeStoreProductDto.toString());
+
         return fakeStoreProductDto.getProduct();
-        //COMPLETE API
     }
 
+    @Override
     public List<Product> getAllProducts() {
-        return List.of();
+
+        System.out.println("Fetching all prducts");
+
+        fakeStoreProductDto[] fakeStoreProductDto =
+                restTemplate.getForObject("https://fakestoreapi.com/products", fakeStoreProductDto[].class);
+
+        List<Product> products = new ArrayList<>();
+        for (fakeStoreProductDto productDto : fakeStoreProductDto) {
+            products.add(productDto.getProduct());
+        }
+        return products;
     }
 
-    public Product createProduct(Product product) {
+    //CREATE PRODUCT
+    @Override
+    public Product createProduct(Long id, String title, Double price, String description, String Category, String image) {
+        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
+        fakeStoreProductDto.setTitle(title);
+        fakeStoreProductDto.setDescription(description);
+        fakeStoreProductDto.setPrice(price);
+        fakeStoreProductDto.setCategory(category);
+
+        FakeStoreProductDto response = restTemplate.postForObject(
+                "https://fakestoreapi.com/products", fakeStoreProductDto, FakeStoreProduct.class
+        );
+
         return null;
+    }
+
+
+    @Override
+    public Product updateProduct(Long id, Product product) {
+        return null;
+    }
+
+
+
+//UPDATE PRODUCT
+
+    @Override
+    public Product updateProduct(long id, String title, Double price, String description, String Category, String imageUrl) {
+//        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
+//        fakeStoreProductDto.setId(id);
+//        fakeStoreProductDto.setTitle(title);
+//        fakeStoreProductDto.setPrice(price);
+//        fakeStoreProductDto.setDescription(description);
+//       // fakeStoreProductDto.setCategory(category);
+//        fakeStoreProductDto.setImage(imageUrl);
+
+        return null;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        restTemplate.delete("https://fakestoreapi.com/products/" + id);
+        System.out.println("Product with ID " + id + " has been deleted");
     }
 }

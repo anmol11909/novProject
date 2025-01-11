@@ -4,55 +4,91 @@ import com.scaler.finalnovprojectmodule.Dto.ErrorDto;
 import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Product;
 import com.scaler.finalnovprojectmodule.service.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-public class ProductController {
-    // CRUD APIs around product
-    //@RequestMapping(value = "/products", ,method = RequestMethod.POST)
-    // anyone doing POST request on the above API, the below method will be executed//
-private ProductService productService;
+import java.util.List;
 
-public ProductController(ProductService productService) { // constructor to assign productservice to product controller. DI
-    this.productService = productService;
-}
+@RestController
+@RequestMapping
+
+// CRUD APIs around product
+//@RequestMapping(value = "/products", ,method = RequestMethod.POST)
+// anyone doing POST request on the above API, the below method will be executed//
+public class ProductController {
+  private ProductService productService;      // connecting both(DEpendency injection)
+  public ProductController(@Qualifier ("SelfProductService") Product productService {
+    // constructor to assign productservice to product controller. DI
+      this.productService = productService;
+  }
+// Spring IOC will create the object of the above controller(framework crates objects for you//
+
+    // APIS//
+
+// 1.) CREATE A PRODUCT//
 
     @PostMapping("/products")
-    public void createProduct(Product product) {
-        // help in creating a product
+    public Product createProduct(@RequestBody Product product) {
+    Product p = productService.createProduct(product.getTitle(),
+            product.getId(),
+            product.getImageUrl(),
+            product.getPrice(),
+            product.getDescription(),
+            product.getCategory().getTitle());
+    return p;
     }
 
-    @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
+//2.) GET A PRODUCT//
 
-    // throwS - can throw
+@GetMapping("/products/{id}")
+public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
 
-        
-        System.out.println("Staring the API here");
+    System.out.println("Starting API here");
 
     Product p = productService.getSingleProduct(id);
 
-        System.out.println("Ending the API here");
-        return p;
-        // getting the product from the service
+    System.out.println("Ending API here");
 
+    ResponseEntity<Product> response = new ResponseEntity<>(p, HttpStatus.OK);
 
+    return response;
+
+}
+
+// 3.) GET LIST OF PRODUCTS
+    @GetMapping("/products")
+    public List<Product> getAllProducts() {
+    return productService.getAllProducts();
     }
-    public void updateProduct(Product product) {
 
+// 4.) UPDATING THE PRODUCT
 
+    @PutMapping("/products/{id}")
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+    return productService.updateProduct(id, product);
     }
-    public void deleteProduct(Long id) {
 
+
+// 5.) DELETING A PRODUCT
+
+    @DeleteMapping("/products/{id}")
+
+    public void deleteProduct(@PathVariable("id") Long id) {
+     productService.deleteProduct(id);
+        System.out.println("Product with id " + id + " has been deleted");
     }
+
     @ExceptionHandler(ProductNotFoundException.class)
     // this will handle the exception if thrown by the method ProductNotFoundException.class
 
+    public ResponseEntity<ErrorDto> handleProductNotFoundException(Exception e) { // it will take the whole stack trace
 
-    public ErrorDto handleProductNotFoundException(Exception e){// it will take the whole stack trace
     ErrorDto errorDto = new ErrorDto();
     errorDto.setMessage(e.getMessage());
-
-    return errorDto;
+    ResponseEntity<ErrorDto> response = new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+    return response;
+        //return null;
     }
 }

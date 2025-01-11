@@ -8,8 +8,14 @@ import java.util.List;
 @Service
 
 public interface ProductService {
-    Product getSingleProduct(long id) throws ProductNotFoundException;
-
+    Product getSingleProduct(Long id) throws ProductNotFoundException;
+//
     List<Product> getAllProducts();
-    Product createProduct(Product product);
+
+    Product createProduct(Long id, String title, Double price, String description, String Category, String image);
+
+    Product updateProduct(Long id, Product product);
+
+    void deleteProduct(Long id);
+
 }
