@@ -37,7 +37,7 @@ public class fakeStoreProductService implements ProductService {
     @Override
     public List<Product> getAllProducts() {
 
-        System.out.println("Fetching all prducts");
+        System.out.println("Fetching all products");
 
         fakeStoreProductDto[] fakeStoreProductDto =
                 restTemplate.getForObject("https://fakestoreapi.com/products", fakeStoreProductDto[].class);
@@ -51,42 +51,40 @@ public class fakeStoreProductService implements ProductService {
 
     //CREATE PRODUCT
     @Override
-    public Product createProduct(Long id, String title, Double price, String description, String Category, String image) {
-        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
+    public Product createProduct(Long id, String title, Double price, String description, String category, String imageUrl) {
+        fakeStoreProductDto fakeStoreProductDto = new fakeStoreProductDto();
         fakeStoreProductDto.setTitle(title);
         fakeStoreProductDto.setDescription(description);
         fakeStoreProductDto.setPrice(price);
         fakeStoreProductDto.setCategory(category);
+        fakeStoreProductDto.setImage(imageUrl);
 
-        FakeStoreProductDto response = restTemplate.postForObject(
-                "https://fakestoreapi.com/products", fakeStoreProductDto, FakeStoreProduct.class
-        );
-
-        return null;
+        fakeStoreProductDto response = restTemplate.postForObject("http://fakestoreapi.com/products",
+                fakeStoreProductDto, fakeStoreProductDto.class);
+        return response.getProduct();
     }
 
 
-    @Override
-    public Product updateProduct(Long id, Product product) {
-        return null;
-    }
 
 
 
 //UPDATE PRODUCT
+@Override
+public Product updateProduct(Long id, Product updateProduct) {
+//    System.out.println("update product with id:" + id);
+//
+//    fakeStoreProductDto fakeStoreProductDto = new fakeStoreProductDto();
+//    fakeStoreProductDto.setId(id);
+//    fakeStoreProductDto.setTitle(updateProduct.getTitle());
+//    fakeStoreProductDto.setDescription(updateProduct.getDescription());
+//    fakeStoreProductDto.setPrice(updateProduct.getPrice());
+//    //fakeStoreProductDto.setCategory(updateProduct.getCategory().getName());
+//    fakeStoreProductDto.setImage(updateProduct.getImageUrl());
+//    restTemplate.put("http://fakestoreapi.com/products/" + id, fakeStoreProductDto, fakeStoreProductDto.class);
+//    return fakeStoreProductDto.getProduct();
 
-    @Override
-    public Product updateProduct(long id, String title, Double price, String description, String Category, String imageUrl) {
-//        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
-//        fakeStoreProductDto.setId(id);
-//        fakeStoreProductDto.setTitle(title);
-//        fakeStoreProductDto.setPrice(price);
-//        fakeStoreProductDto.setDescription(description);
-//       // fakeStoreProductDto.setCategory(category);
-//        fakeStoreProductDto.setImage(imageUrl);
-
-        return null;
-    }
+    return null;
+}
 
     @Override
     public void deleteProduct(Long id) {

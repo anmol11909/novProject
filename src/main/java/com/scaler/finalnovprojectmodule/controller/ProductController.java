@@ -12,14 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
 
-// CRUD APIs around product
-//@RequestMapping(value = "/products", ,method = RequestMethod.POST)
-// anyone doing POST request on the above API, the below method will be executed//
 public class ProductController {
-  private ProductService productService;      // connecting both(DEpendency injection)
-  public ProductController(@Qualifier ("SelfProductService") Product productService {
+  private ProductService productService;
+  // connecting both(Dependency injection)
+  public ProductController(@Qualifier ("fakeStoreProductService") ProductService productService) {
     // constructor to assign productservice to product controller. DI
       this.productService = productService;
   }
@@ -31,10 +28,11 @@ public class ProductController {
 
     @PostMapping("/products")
     public Product createProduct(@RequestBody Product product) {
-    Product p = productService.createProduct(product.getTitle(),
+    Product p = productService.createProduct(
             product.getId(),
-            product.getImageUrl(),
+            product.getTitle(),
             product.getPrice(),
+            product.getImageUrl(),
             product.getDescription(),
             product.getCategory().getTitle());
     return p;
