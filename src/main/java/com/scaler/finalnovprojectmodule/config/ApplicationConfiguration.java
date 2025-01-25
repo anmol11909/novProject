@@ -7,8 +7,11 @@ import org.springframework.web.client.RestTemplate;
 @Component // to mark it as a special class
 
 public class ApplicationConfiguration {
+    public RestTemplate restTemplate;
+
     @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate getRestTemplate() {
+
         return new RestTemplate();
     }
 }

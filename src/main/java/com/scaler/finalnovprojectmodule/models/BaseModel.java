@@ -22,7 +22,6 @@ import java.util.Date;
 
 @MappedSuperclass
 public class BaseModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -41,11 +40,11 @@ public class BaseModel {
     public BaseModel() {
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -70,6 +69,6 @@ public class BaseModel {
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.isDeleted = deleted;
     }
 }
