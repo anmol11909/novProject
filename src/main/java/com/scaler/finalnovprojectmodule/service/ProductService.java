@@ -3,6 +3,7 @@ package com.scaler.finalnovprojectmodule.service;
 import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Product;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface ProductService {
 
    // Product updateProduct(Long id, Product product);
 
-    void deleteProduct(long id);
+ ResponseEntity<String> deleteProduct(long id);
 
-//    Product createProduct(double price, Sting title, String description, String category, String imageUrl) throws BadRequestException;
+public updateProduct(long id, double price, String title, String description, String category, String imageUrl);
 }

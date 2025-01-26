@@ -22,26 +22,37 @@ import java.util.Locale;
 public class Category extends BaseModel {
     private String catTitle;
 
-    public Category(Long id, Date createdAt, Date updatedAt, boolean isDeleted, String title) {
-        super(id, createdAt, updatedAt, isDeleted);
-        this.title = title;
-    }
-
-    public Category(String title) {
-        this.title = title;
-    }
-
     public Category() {
     }
 
-    public Category(Long id, String name){
+    public Category(long id, String name) {
         this.id = id;
         this.catTitle = name;
     }
 
-    public String getCatTitle() {
-        return catTitle;
+    public void setCatTitle(String catTitle) {
+        this.catTitle = catTitle;
     }
+}
+
+
+//
+//    public Category(Long id, Date createdAt, Date updatedAt, boolean isDeleted, String title) {
+//        super(id, createdAt, updatedAt, isDeleted);
+//        this.title = title;
+//    }
+//
+//    public Category(String title) {
+//        this.title = title;
+//    }
+//
+//
+//
+//
+//
+//    public String getCatTitle() {
+//        return catTitle;
+//    }
 
 //    public Category(Long id, Date createdAt, Date updatedAt, boolean isDeleted) {
 //        super(id, createdAt, updatedAt, isDeleted);

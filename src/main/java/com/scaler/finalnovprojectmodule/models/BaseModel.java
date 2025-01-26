@@ -24,7 +24,7 @@ import java.util.Date;
 public class BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    public long id;
     private Date createdAt;
     private Date updatedAt;
     private boolean isDeleted;
