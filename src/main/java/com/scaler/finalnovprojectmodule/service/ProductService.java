@@ -13,17 +13,22 @@ import java.util.Optional;
 
 public interface ProductService {
     Optional<Product> getSingleProduct(long id) throws ProductNotFoundException;
+
+    //PAGINATION FOR GET ALL PRODUCTS
+
+    Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldname);
+
 //
     List<Product> getAllProducts();
 
     //Product createProduct(Long id, String title, Double price, String description, String Category, String image);
 
-    Product createProduct(long id, String title, String description, String category, String imageUrl) throws BadRequestException;
+    Product createProduct(double price, String title, String description, String category, String imageUrl) throws BadRequestException;
 
 
    // Product updateProduct(Long id, Product product);
 
  ResponseEntity<String> deleteProduct(long id);
 
-public updateProduct(long id, double price, String title, String description, String category, String imageUrl);
+Product updateProduct(long id, double price, String title, String description, String category, String imageUrl);
 }

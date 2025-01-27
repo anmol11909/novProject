@@ -1,92 +1,77 @@
 package com.scaler.finalnovprojectmodule.controller;
 
-import com.scaler.finalnovprojectmodule.Dto.ErrorDto;
+import com.scaler.finalnovprojectmodule.Dto.fakeStoreProductDto;
 import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Product;
 import com.scaler.finalnovprojectmodule.service.FSProductService;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @RestController
+public class  FakeStoreProductController {
 
-public class FakeStoreProductController {
-  private FSProductService fsproductService;
-  // connecting both(Dependency injection)
-  public FakeStoreProductController(FSProductService fsproductService) {
-      this.fsproductService = fsproductService;
-  }
-// Spring IOC will create the object of the above controller(framework creates objects for you//
+    private FSProductService fsProductService;
 
-    // APIS//
-
-// 1.) CREATE A PRODUCT//
+    public FakeStoreProductController(FSProductService fsProductService) {
+        this.fsProductService = fsProductService;
+    }
 
     @PostMapping("fsproduct")
-    public Product createProduct(@RequestBody Product product) {
-    Product p = productService.createProduct(
-            product.getId(),
-            product.getTitle(),
-            product.getPrice(),
-            product.getImageUrl(),
-            product.getDescription(),
-            product.getCategory().getTitle());
 
-    return p;
+    public Product createProduct(@RequestBody fakeStoreProductDto fakeStoreProductDto) throws BadRequestException {
+        Product product = fsProductService.createProduct(fakeStoreProductDto.getId(), fakeStoreProductDto.getPrice(),
+                fakeStoreProductDto.getTitle(), fakeStoreProductDto.getDescription(), fakeStoreProductDto.getCategory(), fakeStoreProductDto.getImage());
+        return product;
     }
 
-//2.) GET A PRODUCT//
-
-@GetMapping("/products/{id}")
-public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
-
-    System.out.println("Starting API here");
-
-    Product p = productService.getSingleProduct(id);
-
-    System.out.println("Ending API here");
-
-    ResponseEntity<Product> response = new ResponseEntity<>(p, HttpStatus.OK);
-
-    return response;
-
-}
-
-// 3.) GET LIST OF PRODUCTS
-    @GetMapping("/products")
+    // 3.) GET LIST OF PRODUCTS
+    @GetMapping("/fsproducts")
     public List<Product> getAllProducts() {
-    return productService.getAllProducts();
+        List<Product> products = (List<Product>) fsProductService.getAllProducts();
+        return products;
     }
 
-// 4.) UPDATING THE PRODUCT
 
-    @PutMapping("/products/{id}")
-    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
-    return productService.updateProduct(id, product);
+    // GET A SINGLE PRODUCT
+
+    @GetMapping("fsproduct{id}")
+    public Optional<Product> getSingleProduct(@PathVariable int id) throws ProductNotFoundException {
+        Optional<Product> product = fsproductService.getSingleProduct(id);
+        return product;
+    }
+
+    //PUT MAPPING
+    @PutMapping("fsproduct")
+    public Product updateProduct(@RequestBody FakeStoreProductDto fakeStoreProductDto) throws BadRequestException {
+        Product product = fsProductService.updateProduct(fakeStoreProductDto.getId(), fakeStoreProductDto.getPrice(), fakeStoreProductDto.getTitle(),
+                fakeStoreProductDto.getDescription(), fakeStoreProductDto.getCategory(), fakeStoreProductDto.getImage());
+        return product;
     }
 
 
 // 5.) DELETING A PRODUCT
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("fsproduct/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int id) throws ProductNotFoundException {
+        return fsProductService.deleteProduct(id);
 
-    public void deleteProduct(@PathVariable("id") Long id) {
-     rewproductService.deleteProduct(id);
-        System.out.println("Product with id " + id + " has been deleted");
     }
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    // this will handle the exception if thrown by the method ProductNotFoundException.class
+//    @ExceptionHandler(ProductNotFoundException.class)
+//    // this will handle the exception if thrown by the method ProductNotFoundException.class
+//
+//    public ResponseEntity<ErrorDto> handleProductNotFoundException(Exception e) { // it will take the whole stack trace
+//
+//    ErrorDto errorDto = new ErrorDto();
+//    errorDto.setMessage(e.getMessage());
+//    ResponseEntity<ErrorDto> response = new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+//    return response;
+//        //return null;
+//    }
 
-    public ResponseEntity<ErrorDto> handleProductNotFoundException(Exception e) { // it will take the whole stack trace
-
-    ErrorDto errorDto = new ErrorDto();
-    errorDto.setMessage(e.getMessage());
-    ResponseEntity<ErrorDto> response = new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
-    return response;
-        //return null;
-    }
 }

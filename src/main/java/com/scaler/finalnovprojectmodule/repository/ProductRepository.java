@@ -2,6 +2,7 @@ package com.scaler.finalnovprojectmodule.repository;
 
 import com.scaler.finalnovprojectmodule.models.Product;
 import com.scaler.finalnovprojectmodule.projections.ProductProjection;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,10 +12,13 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository <Product, Long> {
     // Select * from product where description is the decscription in arguement
 
+    @Override
+    Page<Product> findAll(Pageable pageable);
+
+
+    Product findBytitle(String title);
 
     Product findByDescription(String description);
-
-    Product findByTitle(String title);
 
     // this will insert product in my product table
     Product save(Product product);
