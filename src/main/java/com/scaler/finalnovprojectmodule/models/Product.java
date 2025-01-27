@@ -1,3 +1,8 @@
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.scaler.finalnovprojectmodule.models.Category;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+
 //package com.scaler.finalnovprojectmodule.models;
 //
 //import jakarta.persistence.Entity;
@@ -6,29 +11,53 @@
 //import java.util.Date;
 //
 //
-////@Entity
+@Entity
+
+public class Product extends BaseModel {
+    private String title;
+    private String description;
+    @ManyToOne
+    @JsonBackReference
+
+    private Category category;
+    private double price;
+    private String image_url;
+
+    public Product(long productId, String title, String description, Category category, double price, String image_url) {
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.price = price;
+        this.image_url = image_url;
+    }
+
+
+    public Product() {
+
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+}
 //
-////public class Product extends BaseModel{
-////    public Product() {
-////        super();
-////    }
-////
-////    public String getTitle() {
-////        return title;
-////    }
-////
-////    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted) {
-////        super(id, createdAt, updatedAt, isDeleted);
-////    }
-////
-////    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted, String title, String description, Double price, String imageUrl, Category category) {
-////        super(id, createdAt, updatedAt, isDeleted);
-////        this.title = title;
-////        this.description = description;
-////        this.price = price;
-////        this.imageUrl = imageUrl;
-////        this.category = category;
-////    }
+//    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted) {
+//        super(id, createdAt, updatedAt, isDeleted);
+//    }
+//
+//    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted, String title, String description, Double price, String imageUrl, Category category) {
+//        super(id, createdAt, updatedAt, isDeleted);
+//        this.title = title;
+//        this.description = description;
+//        this.price = price;
+//        this.imageUrl = imageUrl;
+//        this.category = category;
+//    }
 ////
 ////    public void setTitle(String title) {
 ////        this.title = title;
