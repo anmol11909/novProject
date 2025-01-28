@@ -1,9 +1,10 @@
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.scaler.finalnovprojectmodule.models.BaseModel;
 import com.scaler.finalnovprojectmodule.models.Category;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
-//package com.scaler.finalnovprojectmodule.models;
+package com.scaler.finalnovprojectmodule.models;
 //
 //import jakarta.persistence.Entity;
 //import jakarta.persistence.ManyToOne;

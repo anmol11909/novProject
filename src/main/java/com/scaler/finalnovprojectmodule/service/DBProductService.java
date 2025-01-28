@@ -8,6 +8,7 @@ import com.scaler.finalnovprojectmodule.repository.ProductRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +22,27 @@ import java.util.Optional;
     ProductRepository productRepository;
     CategoryRepository categoryRepository;
 
-    public DBProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    private RedisTemplate redisTemplate;
+
+    public DBProductService(ProductRepository productRepository, CategoryRepository categoryRepository, RedisTemplate redisTemplate) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
-    public Optional<Product> getSingleProduct(long id) throws ProductNotFoundException {
-        Optional<Product> product = productRepository.findById(id);
-        if(product == null){
+    public Product getSingleProduct(long id) throws ProductNotFoundException {
+
+        Product redisProduct = (Product) redisTemplate.opsForHash().get("PRODUCTS", "product" + id);
+        if(redisProduct == null) {
+            return redisProduct;
+        }
+        Product product = productRepository.findById(id);
+
+        if(product == null) {
             throw new ProductNotFoundException("Product not found");
         }
+        redisTemplate.opsForHash().put("PRODUCTS", "product" + id, product);
         return product;
     }
 
@@ -85,6 +96,11 @@ import java.util.Optional;
             productRepository.deleteById(id);
             return ResponseEntity.ok().build();
 
+    }
+
+    @Override
+    public Product updateProduct(long id, double price, String title, String description, String category, String imageUrl) {
+        return null;
     }
 
 

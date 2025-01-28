@@ -78,4 +78,9 @@ public class StripePaymentService implements PaymentService {
         return paymentLinkUrl + " " + paymentIntentId;
 
     }
+
+    @Override
+    public String makePayment(String orderId, long amount) throws StripeException {
+        return "";
+    }
 }

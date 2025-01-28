@@ -1,7 +1,9 @@
 package com.scaler.finalnovprojectmodule.repository;
 
-import com.scaler.finalnovprojectmodule.models.Product;
+import com.scaler.finalnovprojectmodule.models.
 import com.scaler.finalnovprojectmodule.projections.ProductProjection;
+import com.stripe.model.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,6 +35,8 @@ public interface ProductRepository extends JpaRepository <Product, Long> {
 //
 //    @Query("select p from Product p where p.category.id =:categoryId")
 //    List<Product> getProductsByCategoryId(@Param("categoryId") Long categoryId);
+
+    Product findByid(Long id);
 
     @Query("select p from Product p where p.category.catTitle=:catTitle")
     List<Product> getproductByCatTitle(@Param("catTitle") String catTitle);

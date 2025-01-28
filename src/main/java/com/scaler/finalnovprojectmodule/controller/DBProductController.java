@@ -41,12 +41,16 @@ public class DBProductController {
     //GET SINGLE PRODUCT
 
     @GetMapping("product/{id}")
-    public ResponseEntity<Optional<Product>> get_product(@PathVariable("id") long product_id) throws ProductNotFoundException {
-        Optional<Product> p = productService.getSingleProduct(product_id);
-        if (p.isPresent()) {
+//    public ResponseEntity<Optional<Product>> get_product(@PathVariable("id") long product_id) throws ProductNotFoundException {
+//        Optional<Product> p = productService.getSingleProduct(product_id);
+//        if (p.isPresent()) {
+    public ResponseEntity<Product> get_product(@PathVariable("id") long product_id) throws ProductNotFoundException{
+        Product p = productService.getSingleProduct(product_id);
+        if(p!=null){
             return new ResponseEntity<>(p, HttpStatus.OK);
         }
         throw new ProductNotFoundException("Product with id " + product_id + " not found in the database");
+
     }
 
 

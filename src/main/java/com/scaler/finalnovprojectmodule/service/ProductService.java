@@ -12,9 +12,10 @@ import java.util.Optional;
 @Service
 
 public interface ProductService {
-    Optional<Product> getSingleProduct(long id) throws ProductNotFoundException;
 
     //PAGINATION FOR GET ALL PRODUCTS
+
+    Product getSingleProduct(long id) throws ProductNotFoundException;
 
     Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldname);
 
