@@ -1,5 +1,6 @@
 package com.scaler.finalnovprojectmodule.controller.AIController;
 
+import com.scaler.finalnovprojectmodule.service.aiService.GeminiAiSupportService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

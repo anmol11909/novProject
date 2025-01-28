@@ -27,7 +27,15 @@ public class OrderService {
         orderRepository.save(order);
 
         return new ResponseEntity<>(order, HttpStatus.OK);
+    }
 
+        //WEBHOOK SERVICE TO CHANGE THE ORDER STATUS IF THE PAYMENT HAS BEEN SUCCEDED
+
+        public String orderStatus(long orderId){
+            orderRepository.updateOrderState(orderId);
+            OrderModel order = new OrderModel();
+            order = orderRepository.getById(String.valueOf(orderId));
+            return order.toString();
 
     }
 }
