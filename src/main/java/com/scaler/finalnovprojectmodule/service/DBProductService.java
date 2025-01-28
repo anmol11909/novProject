@@ -1,11 +1,12 @@
 package com.scaler.finalnovprojectmodule.service;
-
-import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Category;
 import com.scaler.finalnovprojectmodule.models.Product;
+
+import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.repository.CategoryRepository;
 import com.scaler.finalnovprojectmodule.repository.ProductRepository;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,10 +18,10 @@ import java.util.Optional;
 
 
 @Service
-    public class DBProductService implements ProductService{
+    public class DBProductService implements ProductService {
 
-    ProductRepository productRepository;
-    CategoryRepository categoryRepository;
+    private ProductRepository productRepository;
+    private CategoryRepository categoryRepository;
 
     private RedisTemplate redisTemplate;
 
@@ -34,12 +35,12 @@ import java.util.Optional;
     public Product getSingleProduct(long id) throws ProductNotFoundException {
 
         Product redisProduct = (Product) redisTemplate.opsForHash().get("PRODUCTS", "product" + id);
-        if(redisProduct == null) {
+        if (redisProduct != null) {
             return redisProduct;
         }
         Product product = productRepository.findById(id);
 
-        if(product == null) {
+        if (product == null) {
             throw new ProductNotFoundException("Product not found");
         }
         redisTemplate.opsForHash().put("PRODUCTS", "product" + id, product);
@@ -50,13 +51,13 @@ import java.util.Optional;
     //PAGINATION TO GET ALL PRODUCTS
 
     @Override
-    public Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldname){
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldname) {
         Page<Product> products = productRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(fieldname).ascending()));
         return products;
     }
 
     @Override
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() {
         return null;
     }
 
@@ -69,16 +70,15 @@ import java.util.Optional;
 
     @Override
     public Product createProduct(double price, String title, String description, String category, String imageUrl) throws BadRequestException {
-         Product p = new Product();
+        Product p = new Product();
         p.setPrice(price);
         p.setTitle(title);
         p.setDescription(description);
         Optional<Category> currCat = categoryRepository.findByCatTitle(category);
 
-        if(currCat.isPresent()){
+        if (currCat.isPresent()) {
             p.setCategory(currCat.get());
-        }
-        else{
+        } else {
             Category newCat = new Category();
             newCat.setCatTitle(category);
             categoryRepository.save(newCat);
@@ -92,22 +92,39 @@ import java.util.Optional;
 
     @Override
 
-        public ResponseEntity<String> deleteProduct(long id){
-            productRepository.deleteById(id);
-            return ResponseEntity.ok().build();
+    public ResponseEntity<String> deleteProduct(long id) {
+        productRepository.deleteById(id);
+        return ResponseEntity.ok().build();
 
     }
 
     @Override
-    public Product updateProduct(long id, double price, String title, String description, String category, String imageUrl) {
+    public Product createProduct(long id, double price, String title, String description, String category, String imageUrl) throws BadRequestException {
         return null;
     }
 
+    @Override
+    public Product updateProduct(long id, double price, String title, String description, String category, String imageUrl) {
+        Product p = new Product();
+        p.setId(id);
+        p.setPrice(price);
+        p.setTitle(title);
+        p.setDescription(description);
+        p.setImage_url(imageUrl);
 
-//    @Override
-//    public Product createProduct(long id, double price, String title, String description, String category, String imageUrl){
-//        return null;
-//    }
+        Optional<Category> currCat = categoryRepository.findByCatTitle(category);
+        if (currCat.isPresent()) {
+            p.setCategory(currCat.get());
+        } else {
+            Category newCat = new Category();
+            newCat.setCatTitle(category);
+            categoryRepository.save(newCat);
+            p.setCategory(newCat);
+        }
+        productRepository.save(p);
+        return p;
+    }
+}
 
 
 //        ProductRepository productRepository;
@@ -129,4 +146,4 @@ import java.util.Optional;
 //        @Override
 //    public List<Product> getAllProducts()
 
-    }
+

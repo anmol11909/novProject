@@ -6,9 +6,11 @@ import com.scaler.finalnovprojectmodule.repository.ProductRepository;
 import com.stripe.exception.StripeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class OrderService {
 
     OrderRepository orderRepository;
@@ -21,7 +23,7 @@ public class OrderService {
 
     public ResponseEntity<OrderModel> getOrder(List<Long> productIds, long customerId, long amount) throws StripeException {
         OrderModel order = new OrderModel();
-        order.setcustomerId(customerId);
+        order.setCustomerId(customerId);
         order.setAmount(amount);
         order.setProductIdList(productIds);
         orderRepository.save(order);

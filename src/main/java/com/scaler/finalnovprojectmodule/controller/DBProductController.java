@@ -5,8 +5,11 @@ import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Product;
 import com.scaler.finalnovprojectmodule.service.DBProductService;
 import com.scaler.finalnovprojectmodule.service.ProductService;
+import jakarta.persistence.NamedStoredProcedureQuery;
+import org.springframework.data.domain.Page;
 import org.apache.coyote.BadRequestException;
-import org.hibernate.query.Page;
+import org.springframework.data.redis.core.RedisTemplate;
+//import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +30,8 @@ public class DBProductController {
     //CREATE PRODUCT
     @PostMapping("/product")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) throws BadRequestException {
-        Product p = DBProductService.createProduct(product.getPrice(), product.getTitle(), product.getDescription(),
+
+        Product p = productService.createProduct(product.getPrice(), product.getTitle(), product.getDescription(),
                 product.getCategory().getCatTitle(), product.getImage_url());
         return new ResponseEntity<>(p, HttpStatus.CREATED);
     }
@@ -57,8 +61,8 @@ public class DBProductController {
     //UPDATE PRODUCT
     @PatchMapping("product")
     public ResponseEntity<Product> update_Product(@RequestBody Product product) {
-        Product p = ProductService.updateProduct(product.getId(), product.getPrice(), product.getTitle(),
-                product.getDescription(), product.getCategory().getCatTitle(), product.getImageUrl());
+        Product p = productService.updateProduct(product.getId(), product.getPrice(), product.getTitle(),
+                product.getDescription(), product.getCategory().getCatTitle(), product.getImage_url());
         return new ResponseEntity<>(p, HttpStatus.OK);
 
     }
@@ -76,7 +80,7 @@ public class DBProductController {
     //GET ALL PRODUCTS USING PAGINATION
 
     @GetMapping("products")
-    public ResponseEntity<Page<Prooduct>> getAllProducts(@RequestParam("pageNumber") int pageNumber,
+    public ResponseEntity<Page<Product>> getAllProducts(@RequestParam("pageNumber") int pageNumber,
                                                          @RequestParam("pageSize")int pageSize, @RequestParam("fieldName") String fieldName){
         Page<Product> products = productService.getAllProducts(pageNumber, pageSize, fieldName);
         return new ResponseEntity<>(products, HttpStatus.OK);
