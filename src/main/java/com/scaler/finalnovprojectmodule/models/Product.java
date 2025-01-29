@@ -1,125 +1,40 @@
 package com.scaler.finalnovprojectmodule.models;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.scaler.finalnovprojectmodule.models.BaseModel;
+import com.scaler.finalnovprojectmodule.models.Category;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.*;
-
-import java.util.Date;
 
 
-//@Entity
-
-//public class Product extends BaseModel{
-//    public Product() {
-//        super();
-//    }
 //
-//    public String getTitle() {
-//        return title;
-//    }
+//import jakarta.persistence.Entity;
+//import jakarta.persistence.ManyToOne;
 //
-//    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted) {
-//        super(id, createdAt, updatedAt, isDeleted);
-//    }
+//import java.util.Date;
 //
-//    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted, String title, String description, Double price, String imageUrl, Category category) {
-//        super(id, createdAt, updatedAt, isDeleted);
-//        this.title = title;
-//        this.description = description;
-//        this.price = price;
-//        this.imageUrl = imageUrl;
-//        this.category = category;
-//    }
 //
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public Double getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(Double price) {
-//        this.price = price;
-//    }
-//
-//    public String getImageUrl() {
-//        return imageUrl;
-//    }
-//
-//    public void setImageUrl(String imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
-//
-//    public Category getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(Category category) {
-//        this.category = category;
-//    }
-//
-//@Getter
-//@Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
-
-
-
 @Entity
-public class Product extends BaseModel{
+
+public class Product extends BaseModel {
     private String title;
     private String description;
-    private  Double price;
-    private String imageUrl;
     @ManyToOne
+    @JsonBackReference
+
     private Category category;
+    private double price;
+    private String image_url;
 
-//    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted, String title, String description, Category category, String imageUrl, Double price) {
-//        super(id, createdAt, updatedAt, isDeleted);
-//        this.title = title;
-//        this.description = description;
-//        this.category = category;
-//        this.imageUrl = imageUrl;
-//        this.price = price;
-//    }
+    public Product() {
+    }
 
-    // ALl args constructor
 
-    public Product(String title, String description, Category category, String imageUrl, Double price) {
+    public Product(long productId, String title, String description, Category category, double price, String image_url) {
         this.title = title;
         this.description = description;
         this.category = category;
-        this.imageUrl = imageUrl;
         this.price = price;
-    }
-
-    public Product(Long id, Date createdAt, Date updatedAt, boolean isDeleted) {
-        super(id, createdAt, updatedAt, isDeleted);
-    }
-
-    public Product() {
-        super();
-    }
-
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", category=" + category +
-                '}';
+        this.image_url = image_url;
     }
 
     public String getTitle() {
@@ -138,22 +53,6 @@ public class Product extends BaseModel{
         this.description = description;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Category getCategory() {
         return category;
     }
@@ -161,4 +60,21 @@ public class Product extends BaseModel{
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
 }
+
