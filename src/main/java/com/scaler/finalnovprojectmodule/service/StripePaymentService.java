@@ -8,7 +8,9 @@ import com.stripe.model.Price;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentLinkCreateParams;
 import com.stripe.param.PriceCreateParams;
+import org.springframework.stereotype.Service;
 
+@Service
 public class StripePaymentService implements PaymentService {
 
     private final OrderService orderService;
@@ -18,7 +20,7 @@ public class StripePaymentService implements PaymentService {
 
 
     @Override
-    public String makePayment(long orderId, long amount) throws StripeException {
+    public String makePayment(String orderId, long amount) throws StripeException {
         Stripe.apiKey = "sk_test_51QlaoNBLQGaqYkggxKoiutkb5hT1AmecY3EdnIKb9TLhOn8xrdlk09T80l61Mu12XWMGAedAh3ynvIQzkZQnuLia00MNP00f1w";
 
 
@@ -79,8 +81,4 @@ public class StripePaymentService implements PaymentService {
 
     }
 
-    @Override
-    public String makePayment(String orderId, long amount) throws StripeException {
-        return "";
-    }
 }

@@ -38,11 +38,15 @@ import java.util.Optional;
         if (redisProduct != null) {
             return redisProduct;
         }
-        Product product = productRepository.findById(id);
+        Optional<Product> productOptional = productRepository.findById(id);
 
-        if (product == null) {
+        if (productOptional.isEmpty()) {
             throw new ProductNotFoundException("Product not found");
         }
+
+        Product product = productOptional.get();
+
+
         redisTemplate.opsForHash().put("PRODUCTS", "product" + id, product);
         return product;
     }
@@ -89,6 +93,11 @@ import java.util.Optional;
         return savedProduct;
     }
 
+    @Override
+    public Product updateproduct(long id, double price, String title, String description, String category, String imageUrl) {
+        return null;
+    }
+
 
     @Override
 
@@ -98,10 +107,10 @@ import java.util.Optional;
 
     }
 
-    @Override
-    public Product createProduct(long id, double price, String title, String description, String category, String imageUrl) throws BadRequestException {
-        return null;
-    }
+//    @Override
+//    public Product createProduct(long id, double price, String title, String description, String category, String imageUrl) throws BadRequestException {
+//        return null;
+//    }
 
     @Override
     public Product updateProduct(long id, double price, String title, String description, String category, String imageUrl) {
