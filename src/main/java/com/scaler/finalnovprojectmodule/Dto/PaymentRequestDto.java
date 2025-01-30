@@ -4,6 +4,14 @@ public class PaymentRequestDto {
     String orderId;
     long amount;
 
+    public PaymentRequestDto(String orderId, long amount) {
+        this.orderId = orderId;
+        this.amount = amount;
+    }
+
+    public PaymentRequestDto() {
+    }
+
     public String getOrderId() {
         return orderId;
     }
