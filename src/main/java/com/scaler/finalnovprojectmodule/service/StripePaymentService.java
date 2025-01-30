@@ -13,43 +13,36 @@ import org.springframework.stereotype.Service;
 @Service
 public class StripePaymentService implements PaymentService {
 
-    private final OrderService orderService;
-    public StripePaymentService(OrderService orderService) {
-        this.orderService = orderService;
-    }
+   // private final OrderService orderService;
+//    public StripePaymentService(OrderService orderService) {
+//        this.orderService = orderService;
+//    }
 
 
     @Override
     public String makePayment(String orderId, long amount) throws StripeException {
-        Stripe.apiKey = "sk_test_51QlaoNBLQGaqYkggxKoiutkb5hT1AmecY3EdnIKb9TLhOn8xrdlk09T80l61Mu12XWMGAedAh3ynvIQzkZQnuLia00MNP00f1w";
-
-
-        //1.) CREATE PAYMENT INTENT WITH META DATA
-
-        PaymentIntentCreateParams intentParams = PaymentIntentCreateParams.builder().setAmount(amount)
-                .setCurrency("INR")
-                .putMetadata("order_id", String.valueOf(orderId))
-                .build();
-        PaymentIntent paymentIntent = PaymentIntent.create(intentParams);
-
-
-
-
-        //2.)CREATING PRICE OBJECT
+        Stripe.apiKey = "sk_test_51Qg2kJAZYzBCgUSnYCkMjztHsemNLhMtRIuYHfzFimFdw3kc1Swgk3mJTYR1JCn0r9xrJX7uoawX5NosXIiozwsV00MV5A7xCp";
 
         PriceCreateParams params =
-                PriceCreateParams.builder().setCurrency("INR")
+                PriceCreateParams.builder()
+                        .setCurrency("INR")
                         .setUnitAmount(amount)
+                        .setRecurring(
+                                PriceCreateParams.Recurring.builder()
+                                        .setInterval(PriceCreateParams.Recurring.Interval.MONTH)
+                                        .build()
+                        )
                         .setProductData(
-                                PriceCreateParams.ProductData.builder().setName(String.valueOf(orderId)).build()
+                                PriceCreateParams.ProductData.builder().setName("Gold Plan").build()
                         )
                         .build();
 
         Price price = Price.create(params);
 
-        //3.) CREATING PAYMENT LINK BY using THE PRICE OBJECT AND PAYMENTINTENT METADATA
 
-        PaymentLinkCreateParams linkParams =
+        //CREATE PAYMENT LINK
+
+        PaymentLinkCreateParams linkParam =
                 PaymentLinkCreateParams.builder()
                         .addLineItem(
                                 PaymentLinkCreateParams.LineItem.builder()
@@ -65,20 +58,15 @@ public class StripePaymentService implements PaymentService {
                                                         .build()
                                         )
                                         .build()
-
                         )
-
-                        .putMetadata("order_id", String.valueOf(orderId))
-                        .putMetadata("payment_intent_id", paymentIntent.getId())
+                        .putMetadata("order_id", orderId)
                         .build();
 
-        PaymentLink paymentLink = PaymentLink.create(linkParams);
+        PaymentLink paymentLink = PaymentLink.create(linkParam);
 
         String paymentLinkUrl = paymentLink.getUrl();
-        String paymentIntentId = paymentIntent.getId();
 
-        return paymentLinkUrl + " " + paymentIntentId;
-
+        return paymentLinkUrl;
     }
 
 }

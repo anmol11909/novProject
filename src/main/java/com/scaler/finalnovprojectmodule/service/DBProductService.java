@@ -49,14 +49,16 @@ import java.util.Optional;
 
         redisTemplate.opsForHash().put("PRODUCTS", "product" + id, product);
         return product;
+
+
     }
 
 
     //PAGINATION TO GET ALL PRODUCTS
 
     @Override
-    public Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldname) {
-        Page<Product> products = productRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(fieldname).ascending()));
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, String fieldName) {
+        Page<Product> products = productRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(fieldName).ascending()));
         return products;
     }
 
