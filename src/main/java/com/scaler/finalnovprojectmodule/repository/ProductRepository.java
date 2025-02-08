@@ -41,7 +41,6 @@ public interface ProductRepository extends JpaRepository <Product, Long> {
     List<ProductProjection> getProductsByCategoryIdUsingProjections(@Param("categoryId") long categoryId);
 
 
-    Product deleteProductById(long id);
 
     Product findBydescription(String description);
 

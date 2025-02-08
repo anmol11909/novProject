@@ -29,7 +29,9 @@ public interface ProductService {
 
     Product updateproduct(long id, double price, String title, String description, String category, String imageUrl);
 
- ResponseEntity<String> deleteProduct(long id);
+    ResponseEntity<String> deleteProduct(long id);
+
+
 
 Product updateProduct(long id, double price, String title, String description, String category, String imageUrl);
 }

@@ -70,7 +70,7 @@ public class DBProductController {
     //
     //DELETE PRODUCT
     @DeleteMapping("product/{id}")
-    public ResponseEntity<String> delete_Product(@PathVariable("id") long product_id) {
+    public ResponseEntity<String> deleteProduct(@PathVariable("id") long product_id) {
 
         return productService.deleteProduct(product_id);
 
