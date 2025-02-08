@@ -5,11 +5,15 @@ import com.scaler.finalnovprojectmodule.models.Product;
 import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.repository.CategoryRepository;
 import com.scaler.finalnovprojectmodule.repository.ProductRepository;
+import jakarta.transaction.Transactional;
+import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,8 @@ import java.util.Optional;
 @Service
     public class DBProductService implements ProductService {
 
+
+    //@Autowired
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
 
@@ -50,8 +56,13 @@ import java.util.Optional;
         redisTemplate.opsForHash().put("PRODUCTS", "product" + id, product);
         return product;
 
-
     }
+
+//        Optional<Product> product = productRepository.findById(id);
+//        if(product==null){
+//            throw new ProductNotFoundException("Product not found");
+//        }
+//        return product;
 
 
     //PAGINATION TO GET ALL PRODUCTS
@@ -103,10 +114,19 @@ import java.util.Optional;
 
     @Override
 
+
+    //@Transactional
     public ResponseEntity<String> deleteProduct(long id) {
+//       // Optional<Product> product = productRepository.findById(id);
+//        if (product.isPresent()) {
+//            productRepository.deleteById(id);
+//            return ResponseEntity.ok("Product deleted succesfully");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+//        }
+
         productRepository.deleteById(id);
         return ResponseEntity.ok().build();
-
     }
 
 //    @Override
@@ -136,6 +156,7 @@ import java.util.Optional;
         return p;
     }
 }
+
 
 
 //        ProductRepository productRepository;
