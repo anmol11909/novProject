@@ -1,38 +1,36 @@
 package com.scaler.finalnovprojectmodule.controller;
 
 import com.scaler.finalnovprojectmodule.Dto.ErrorDto;
+import com.scaler.finalnovprojectmodule.Dto.ProductRequestDto;
 import com.scaler.finalnovprojectmodule.exceptions.ProductNotFoundException;
 import com.scaler.finalnovprojectmodule.models.Product;
 import com.scaler.finalnovprojectmodule.service.DBProductService;
 import com.scaler.finalnovprojectmodule.service.ProductService;
-import jakarta.persistence.NamedStoredProcedureQuery;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.apache.coyote.BadRequestException;
-import org.springframework.data.redis.core.RedisTemplate;
 //import org.hibernate.query.Page;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 
 @RestController
-public class DBProductController {
+@RequiredArgsConstructor
+public class ProductController {
 
     private final ProductService productService;
-
-    public DBProductController(@Qualifier("DBProductService") ProductService productService) {
-        this.productService = productService;
-    }
+    private final DBProductService dbProductService;
 
     //CREATE PRODUCT
     @PostMapping("/product")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) throws BadRequestException {
+    public ResponseEntity<Product> createProduct(
+            @Valid @RequestBody ProductRequestDto requestDto) throws BadRequestException {
 
-        Product p = productService.createProduct(product.getPrice(), product.getTitle(), product.getDescription(),
-                product.getCategory().getCatTitle(), product.getImage_url());
+        Product p = productService.createProduct(
+                requestDto.getPrice(), requestDto.getTitle(), requestDto.getDescription(),
+                requestDto.getCategory().getCatTitle(), requestDto.getImageUrl());
         return new ResponseEntity<>(p, HttpStatus.CREATED);
     }
     //GET All PRODUCTS
@@ -45,10 +43,8 @@ public class DBProductController {
     //GET SINGLE PRODUCT
 
     @GetMapping("product/{id}")
-//    public ResponseEntity<Optional<Product>> get_product(@PathVariable("id") long product_id) throws ProductNotFoundException {
-//        Optional<Product> p = productService.getSingleProduct(product_id);
-//        if (p.isPresent()) {
-    public ResponseEntity<Product> get_product(@PathVariable("id") long product_id) throws ProductNotFoundException{
+
+    public ResponseEntity<Product> getProduct(@PathVariable("id") long product_id) throws ProductNotFoundException{
         Product p = productService.getSingleProduct(product_id);
         if(p!=null){
             return new ResponseEntity<>(p, HttpStatus.OK);
@@ -59,8 +55,8 @@ public class DBProductController {
 
 
     //UPDATE PRODUCT
-    @PatchMapping("product")
-    public ResponseEntity<Product> update_Product(@RequestBody Product product) {
+    @PutMapping("product")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
         Product p = productService.updateProduct(product.getId(), product.getPrice(), product.getTitle(),
                 product.getDescription(), product.getCategory().getCatTitle(), product.getImage_url());
         return new ResponseEntity<>(p, HttpStatus.OK);
